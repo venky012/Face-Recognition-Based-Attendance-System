@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+Dashboard
+{% endblock title %}
+{% block content %}
+    {% if not user.is_superuser %}
+        <a class="btn btn-primary float-right" href="{% url 'employeeform' %}"> Add Employee </a>
+    {% else %}
+    {% endif %}
+    <h1 style="padding:5px;text-align:center;">List of Employees</h1>
+    <div>
+        {% if emplist %}
+            <table class="table table-hover" style="text-align:center;">
+                <thead>
+                    <tr>
+                        <th scope="col">Photo</th>
+                        <th scope="col">Employee Name</th>
+                        <th scope="col">Employee Id</th>
+                        <th scope="col">Mobile Number</th>
+                        <th scope="col">Department</th>
+                    </tr>
+                </thead>
+                {% for emp in emplist %}
+                    <tbody>
+                        <tr>
+                            <td><img  style="height:60px;" src="{{ emp.avatar.url }}"/></td>
+                            <td style="padding: 28px;">{{ emp.employee_name }}</td>
+                            <td style="padding: 28px;">{{ emp.employee_id }}</td>
+                            <td style="padding: 28px;">{{ emp.employee_mobile_number }}</td>
+                            <td style="padding: 28px;">{{ emp.department }}</td>
+                        </tr>
+                    </tbody>
+                {% endfor %}
+            </table>
+        {% else %}
+            <h1>no employees present :) enjoy the day!!</h1>
+        {% endif %}
+    </div>
+{% endblock content %}
