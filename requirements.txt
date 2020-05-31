@@ -61,7 +61,7 @@ gcloud==0.17.0
 GDAL==3.0.2
 gmane==0.1.dev25
 googleapis-common-protos==1.51.0
-gunicorn==19.4.5
+gunicorn==19.5.0
 httplib2==0.16.0
 idna==2.7
 ipykernel==5.3.0
