@@ -3,6 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import cache_control
+from django.contrib import messages
 
 
 from accounts.decorators import phone_confirmation_required
@@ -55,7 +56,13 @@ def recogface(request):
     j = 0
     for i in image:
         get_image = face_recognition.load_image_file(image[j])
-        known_face_encodings.append(face_recognition.face_encodings(get_image)[0])
+        
+        try:
+            known_face_encodings.append(face_recognition.face_encodings(get_image)[0])
+        except:
+            messages.warning(request,'face not recognised of employee_id: '+str(ids[j])+' upload a new photo')
+            return HttpResponseRedirect(reverse('dashboard'))
+
         known_face_names.append(ids[j])
         j = j + 1
 
@@ -168,5 +175,4 @@ def recogface(request):
     # Release handle to the webcam
     video_capture.release()
     cv2.destroyAllWindows()
-    return render(request,'attendancerecog.html')
-
+    return HttpResponseRedirect(reverse('dashboard'))
