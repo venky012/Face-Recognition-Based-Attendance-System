@@ -6,6 +6,7 @@ Dashboard
 {% block content %}
     {% if not user.is_superuser %}
         <a class="btn btn-primary float-right" href="{% url 'employeeform' %}"> Add Employee </a>
+        <a class="btn btn-primary float-right" href="{% url 'facerecog' %}"> Take attendance </a>
     {% else %}
     {% endif %}
     <h1 style="padding:5px;text-align:center;">List of Employees</h1>

@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'accounts',
+    'facerecog',
     'crispy_forms',
     'django_cleanup.apps.CleanupConfig',
 ]

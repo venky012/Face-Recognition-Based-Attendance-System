@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
 import urllib.request, json 
 from django.contrib import messages
-
+import matplotlib.pyplot as plt
 
 # Create your views here.
 from accounts.forms import ProductKeyForm, AdminProfileInfoForm, EmpProfileInfoForm,OtpVerifyForm
@@ -47,9 +47,6 @@ def adminView(request):
                     user.username = form.cleaned_data['username']
                     user.name = form.cleaned_data['name']
                     request.session['mobile_number'] = form.cleaned_data['mobile_number']
-                    # json_content = urllib.request.urlopen("https://2factor.in/API/V1/"+api_key+"/SMS/"+str(request.session['mobile_number'])+"/AUTOGEN").read()
-                    # print(json_content,"-----------------------------------------------")
-                    # request.session['session_id'] = json_content['Details']
                     user.mobile_number = request.session['mobile_number']
                     user.organisation = form.cleaned_data['organisation']
                     user.set_password(form.cleaned_data['password'])
@@ -61,28 +58,19 @@ def adminView(request):
 
 def otpverifyView(request):
     form = OtpVerifyForm(request.POST or None)
-    print("1-----------------------------------------------------------------------------")
     if request.method == 'POST':
-        print(form,'request-------------------------------')
         if form.is_valid():
-            print(form,'validated----------------------------')
             otp_entered = form.cleaned_data['otp_field']
-            print(otp_entered)
-            print(request.session['session_id'])
             json_content = {}
             try:
                 json_content = urllib.request.urlopen("https://2factor.in/API/V1/"+api_key+"/SMS/VERIFY/"+str(request.session['session_id'])+"/"+str(otp_entered)).read()
                 json_content = json.loads(json_content.decode('utf-8'))
             except:
                 json_content = {'Details':'Not Matched'}
-            print(json_content)
             if json_content['Details'] == 'OTP Matched':
-                print(type(request.session['product_key']))
                 user = AdminProfileInfo.objects.filter(product_key__product_key = request.session['product_key']).first()
-                print(user.username,user.organisation,user.mobile_number)
                 user.is_completed = True
                 user.save()
-                print("done--------------------------------------")
                 return redirect(reverse('login'))
             else:
                 messages.warning(request, 'Entered incorrect OTP, check your mobile for OTP we are sending again')
