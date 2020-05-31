@@ -52,7 +52,7 @@ def recogface(request):
     for i in image:
         get_image = face_recognition.load_image_file(image[j])
         known_face_encodings.append(face_recognition.face_encodings(get_image)[0])
-        known_face_names.append(names[j])
+        known_face_names.append(ids[j])
         j = j + 1
 
     
@@ -117,6 +117,7 @@ def recogface(request):
                     index = 2
                     for i in ids:
                         if sheet.cell(row=index,column=2).value == name:
+                            print(name)
                             break
                         else:
                             index = index + 1
@@ -126,8 +127,7 @@ def recogface(request):
                 else:
                     pass
         
-        print(name)
-        
+
         face_names.append(name)
         
         process_this_frame = not process_this_frame
@@ -164,4 +164,5 @@ def recogface(request):
     # Release handle to the webcam
     video_capture.release()
     cv2.destroyAllWindows()
-    return HttpResponseRedirect(reverse('dashboard'))
+    return render(request,'attendancerecog.html')
+
