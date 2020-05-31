@@ -1,8 +1,11 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.cache import cache_control
 
 
+from accounts.decorators import phone_confirmation_required
 from accounts.models import EmployeeProfileInfo
 from django.conf import settings
 
@@ -18,8 +21,9 @@ import os
 path = settings.BASE_DIR
 
 
-
-
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
+@login_required
+@phone_confirmation_required
 def recogface(request):
     os.environ['DISPLAY'] = ':0'
 
