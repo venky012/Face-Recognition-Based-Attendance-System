@@ -8,7 +8,6 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
 import urllib.request, json 
 from django.contrib import messages
-import matplotlib.pyplot as plt
 
 # Create your views here.
 from accounts.forms import ProductKeyForm, AdminProfileInfoForm, EmpProfileInfoForm,OtpVerifyForm
