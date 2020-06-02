@@ -53,6 +53,8 @@ def recogface(request):
     known_face_names = []
     known_face_encodings = []
 
+    warn = []
+
     j = 0
     for i in image:
         get_image = face_recognition.load_image_file(image[j])
@@ -60,12 +62,18 @@ def recogface(request):
         try:
             known_face_encodings.append(face_recognition.face_encodings(get_image)[0])
         except:
-            messages.warning(request,'face not recognised of employee_id: '+str(ids[j])+' upload a new photo')
-            return HttpResponseRedirect(reverse('dashboard'))
-
+            warn.append('face not recognised of employee_id: '+str(ids[j])+' upload a new photo')
+            
         known_face_names.append(ids[j])
         j = j + 1
 
+    if len(warn)>0:
+        for i in warn:
+            messages.warning(request,i)
+        # Release handle to the webcam
+        video_capture.release()
+        cv2.destroyAllWindows()
+        return HttpResponseRedirect(reverse('dashboard'))
     
     try:
         book = load_workbook(path+"/facerecog/attendance_sheets/"+str(year)+"_"+str(month)+'.xlsx')
