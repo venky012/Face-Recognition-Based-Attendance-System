@@ -124,6 +124,7 @@ def recogface(request):
                     index = 2
                     for i in ids:
                         if sheet.cell(row=index,column=2).value == name:
+                            print(name)
                             break
                         else:
                             index = index + 1
